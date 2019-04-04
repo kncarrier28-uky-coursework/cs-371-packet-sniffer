@@ -63,6 +63,9 @@ class Flow:
             else:
                 print("Average time to ack: ", self.avgAckTime, " seconds")
 
+    def dump(self):
+        return [self.proto, self.avgSize, self.avgTtl, self.numPkts]
+
 def fields_extraction(x):
     print(x.sprintf("{IP:%IP.src%, %IP.dst%, %IP.len%, }"
             "{TCP:%TCP.sport%, %TCP.dport%, }"
@@ -70,7 +73,7 @@ def fields_extraction(x):
 
 flows = []
 
-pkts = sniff(filter = "tcp or udp", prn = fields_extraction, count = 1000)
+pkts = sniff(filter = "tcp or udp", prn = fields_extraction, count = 100)
 
 print("\nPackets Sniffed: ", len(pkts))
 
