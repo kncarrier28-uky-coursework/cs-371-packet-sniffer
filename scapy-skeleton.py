@@ -14,8 +14,7 @@ import statistics
 class Flow:
     def __init__(self, pkt):
         self.proto = pkt[1].proto
-        if pkt[1].proto == 6:
-            self.avgAckTime = -1
+        self.avgAckTime = -1
         self.srcIp = pkt[1].src
         self.dstIp = pkt[1].dst
         self.srcPort = pkt[2].sport
@@ -68,7 +67,7 @@ class Flow:
                 print("Average time to ack: ", self.avgAckTime, " seconds")
 
     def dump(self):
-        return [self.proto, self.avgSize, self.avgTtl, self.numPkts]
+        return [self.proto, self.avgSize, self.avgTtl, self.numPkts, self.avgAckTime]
 
 def fields_extraction(x):
     print(x.sprintf("{IP:%IP.src%, %IP.dst%, %IP.len%, }"
@@ -91,12 +90,8 @@ for pkt in pkts:
 
 print("Number of Detected Flows: ", len(flows))
 
-with open('flow_info.csv', mode='w') as flow_info:
-    flow_writer = csv.writer(flow_info, delimiter=',', quoting=csv.QUOTE_ALL)
-    #flow_writer.writerow(['flow_id', 'feature_1', 'feature_2', 'feature_3', 'label'])
-    flow_writer.writerow([flow, feature_1_val, feature_2_val, feature_3_val, lab])
-
-#CSV generation should go here
-for i, flow in enumerate(flows):
-    print("\nFlow id -", i)
-    flow.printFeatures()
+with open('flow_info.csv', mode='w') as flowInfo:
+    flowWriter = csv.writer(flowInfo, delimiter=',', quoting=csv.QUOTE_NONE)
+    for i, flow in enumerate(flows):
+        flowDump = flow.dump()
+        flowWriter.writerow([flowDump[0], flowDump[1], flowDump[2], flowDump[3], flowDump[4], 1])
