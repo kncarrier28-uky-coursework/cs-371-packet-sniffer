@@ -7,6 +7,10 @@ import os
 import csv
 import statistics
 
+# with open('pkt_info.csv', mode='w') as pkt_info:
+#    pkt_writer = csv.writer(pkt_info, delimiter=',', quoting=csv.QUOTE_ALL)
+#    pkts = sniff(prn = fields_extraction, count = 10)
+
 class Flow:
     def __init__(self, pkt):
         self.proto = pkt[1].proto
@@ -83,6 +87,11 @@ for pkt in pkts:
         flows.append(Flow(pkt))
 
 print("Number of Detected Flows: ", len(flows))
+
+with open('flow_info.csv', mode='w') as flow_info:
+    flow_writer = csv.writer(flow_info, delimiter=',', quoting=csv.QUOTE_ALL)
+    #flow_writer.writerow(['flow_id', 'feature_1', 'feature_2', 'feature_3', 'label'])
+    flow_writer.writerow([flow, feature_1_val, feature_2_val, feature_3_val, lab])
 
 #CSV generation should go here
 for i, flow in enumerate(flows):
