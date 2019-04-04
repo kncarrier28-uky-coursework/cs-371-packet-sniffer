@@ -1,3 +1,6 @@
+#Retrain Data Each Time
+flow_info.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
