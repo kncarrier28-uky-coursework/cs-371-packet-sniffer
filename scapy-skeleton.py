@@ -76,7 +76,7 @@ def fields_extraction(x):
 
 flows = []
 
-pkts = sniff(filter = "tcp or udp", prn = fields_extraction, count = 100)
+pkts = sniff(filter = "tcp or udp", prn = fields_extraction, count = 1000)
 
 print("\nPackets Sniffed: ", len(pkts))
 
