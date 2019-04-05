@@ -1,6 +1,9 @@
 #Retrain Data Each Time
 flow_info.csv
 
+# Exclude IDE-specific files
+.vscode/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
