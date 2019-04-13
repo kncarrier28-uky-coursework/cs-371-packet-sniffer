@@ -103,6 +103,9 @@ print("Number of Detected Flows: ", len(flows))
 
 with open('flow_info.csv', mode='w') as flowInfo:
     flowWriter = csv.writer(flowInfo, delimiter=',', quoting=csv.QUOTE_NONE)
+    # write headers
+    flowWriter.writerow(["proto", "avgSize", "avgTtl", "numPkts", "avgAckTime", "type"])
+    # write flows
     for i, flow in enumerate(flows):
         flowDump = flow.dump()
         flowWriter.writerow([flowDump[0], flowDump[1], flowDump[2], flowDump[3], flowDump[4], 1])
