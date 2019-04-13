@@ -13,8 +13,13 @@ import statistics
 
 class Flow:
     def __init__(self, pkt):
-        self.proto = pkt[1].proto
+        if pkt[1].version == 6:
+            self.proto = pkt[1].nh
+        else:
+            self.proto = pkt[1].proto
         self.avgAckTime = -1
+        if self.proto == 6:
+            self.avgAckTime = 0
         self.srcIp = pkt[1].src
         self.dstIp = pkt[1].dst
         self.srcPort = pkt[2].sport
@@ -25,7 +30,8 @@ class Flow:
         self.numPkts = 1
 
     def isPartOfFlow(self, pkt):
-        if pkt[1].proto == self.proto:
+        pktProto = pkt[1].proto if pkt[1].version == 4 else pkt[1].nh
+        if pktProto == self.proto:
             if (pkt[1].src == self.srcIp and pkt[1].dst == self.dstIp) or (pkt[1].src == self.dstIp and pkt[1].dst == self.srcIp):
                 if (pkt[1].sport == self.srcPort and pkt[1].dport == self.dstPort) or (pkt[1].sport == self.dstPort and pkt[1].dport == self.srcPort):
                     self.calcFeatures(pkt)
@@ -71,20 +77,24 @@ class Flow:
 
 def fields_extraction(x):
     print(x.sprintf("{IP:%IP.src%, %IP.dst%, %IP.len%, }"
-            "{TCP:%TCP.sport%, %TCP.dport%, }"
-            "{UDP:%UDP.sport%, %UDP.dport%}"))
+        "{IPv6:%IPv6.src%, %IPv6.dst%, %IPv6.plen%, }"
+        "{TCP:%TCP.sport%, %TCP.dport%}"
+        "{UDP:%UDP.sport%, %UDP.dport%}"))
 
 flows = []
 
-pkts = sniff(filter = "tcp or udp", prn = fields_extraction, count = 1000)
+pkts = sniff(filter = "tcp or udp", prn = fields_extraction, count = 100)
 
 print("\nPackets Sniffed: ", len(pkts))
 
 for pkt in pkts:
+    print("Test 1")
     inAFlow = False
     for flow in flows:
+        print("test 2")
         if flow.isPartOfFlow(pkt) == True:
             inAFlow = True
+        print("Test 3")
     if inAFlow == False:
         flows.append(Flow(pkt))
 
@@ -92,9 +102,6 @@ print("Number of Detected Flows: ", len(flows))
 
 with open('flow_info.csv', mode='w') as flowInfo:
     flowWriter = csv.writer(flowInfo, delimiter=',', quoting=csv.QUOTE_NONE)
-    # write headers
-    flowWriter.writerow(["proto", "avgSize", "avgTtl", "numPkts", "avgAckTime", "type"])
-    # write flows
     for i, flow in enumerate(flows):
         flowDump = flow.dump()
         flowWriter.writerow([flowDump[0], flowDump[1], flowDump[2], flowDump[3], flowDump[4], 1])

@@ -1,6 +1,6 @@
-import pandas as pd 
+import pandas as pd
 import numpy as np
-import csv 
+import csv
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn.svm import SVC
@@ -9,12 +9,12 @@ from sklearn import tree
 
 
 
-df = pd.read_csv("data.csv", header=None)
+df = pd.read_csv("flow_info.csv", header=None)
 # You might not need this next line if you do not care about losing information about flow_id etc. All you actually need to
 # feed your machine learning model are features and output label.
-columns_list = ['flow_id', 'IPsrc', 'IPdst', 'proto', 'feature_1', 'feature_2', 'feature_3', 'feature_4', 'feature_5', 'label']
+columns_list = ['proto', 'feature_1', 'feature_2', 'feature_3', 'feature_4', 'label']
 df.columns = columns_list
-features = ['proto', 'feature_1', 'feature_2', 'feature_3', 'feature_4', 'feature_5']
+features = ['proto', 'feature_1', 'feature_2', 'feature_3', 'feature_4']
 
 X = df[features]
 y = df['label']
@@ -34,8 +34,9 @@ for i in range(0, 10):
     #SVM's
     # clf = SVC(gamma='auto')     #SVC USE THIS
     # clf = LinearSVC()  #Linear SVC
-    # clf.fit(X_train, y_train) 
+    # clf.fit(X_train, y_train)
 
 
     #here you are supposed to calculate the evaluation measures indicated in the project proposal (accuracy, F-score etc)
     result = clf.score(X_test, y_test)  #accuracy score
+    print(result)
