@@ -13,7 +13,8 @@ import statistics
 
 class Flow:
     def __init__(self, pkt):
-        if pkt[1].version == 6:
+        self.ipVersion = pkt[1].version
+        if self.ipVersion == 6:
             self.proto = pkt[1].nh
         else:
             self.proto = pkt[1].proto
@@ -55,7 +56,7 @@ class Flow:
     def checkForAck(self, pkt):
         for flowPkt in self.pkts:
             if flowPkt[2].seq == pkt[2].ack:
-                if self.avgAckTime == -1:
+                if self.avgAckTime == -1 or self.avgAckTime == 0:
                     self.avgAckTime = pkt.time - flowPkt.time
                 else:
                     self.avgAckTime = statistics.mean([pkt.time - flowPkt.time, self.avgAckTime])
@@ -83,20 +84,20 @@ def fields_extraction(x):
 
 flows = []
 
-pkts = sniff(filter = "tcp or udp", prn = fields_extraction, count = 100)
+pkts = sniff(filter = "tcp or udp", count = 10000)
 
 print("\nPackets Sniffed: ", len(pkts))
 
 for pkt in pkts:
-    print("Test 1")
-    inAFlow = False
-    for flow in flows:
-        print("test 2")
-        if flow.isPartOfFlow(pkt) == True:
-            inAFlow = True
-        print("Test 3")
-    if inAFlow == False:
-        flows.append(Flow(pkt))
+    if pkt[1].version == 4:
+        inAFlow = False
+        for flow in flows:
+            if flow.isPartOfFlow(pkt) == True:
+                inAFlow = True
+        if inAFlow == False:
+            flows.append(Flow(pkt))
+    else:
+        print("Not IPv4")
 
 print("Number of Detected Flows: ", len(flows))
 
