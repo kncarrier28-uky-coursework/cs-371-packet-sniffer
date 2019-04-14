@@ -6,6 +6,11 @@ class Flow:
         self.proto = pkt[1].proto
         self.srcIp = pkt[1].src
         self.dstIp = pkt[1].dst
+        if pkt[1].dst == 'localhost':
+            self.srcIp = pkt[1].dstIp
+            self.dstIp = pkt[1].srcIp
+            self.srcPort = pkt[2].dport
+            self.dstPort = pkt[2].sport
         self.srcPort = pkt[2].sport
         self.dstPort = pkt[2].dport
         self.avgSize = pkt[1].len
