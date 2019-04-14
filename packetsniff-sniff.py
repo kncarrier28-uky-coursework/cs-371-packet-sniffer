@@ -7,6 +7,7 @@ import os
 import csv
 
 from packetsniff.flow import Flow
+from packetsniff.interfaces import getIpAddresses
 
 ## progress display ##
 progressCount = 0 # number processed
@@ -41,7 +42,14 @@ pkts = sniff(filter = "tcp or udp", prn=sniffProgress, count = sniffCount)
 progressCount = 0
 print("\nCalculating flows... 0 processed", end='')
 
+ipaddrs = getIpAddresses()
 for pkt in pkts:
+    for ip in ipaddrs:
+        if (pkt[1].src == ip):
+            pkt[1].src = "localhost"
+        if (pkt[1].dst == ip):
+            pkt[1].dst = "localhost"
+
     if pkt[1].version == 4:
         inAFlow = False
         for flow in flows:
