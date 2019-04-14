@@ -14,13 +14,11 @@ class Flow:
         self.numPkts = 1
 
     def isPartOfFlow(self, pkt):
-        pktProto = pkt[1].proto if pkt[1].version == 4 else pkt[1].nh
+        pktProto = pkt[1].proto
         if pktProto == self.proto:
             if (pkt[1].src == self.srcIp and pkt[1].dst == self.dstIp) or (pkt[1].src == self.dstIp and pkt[1].dst == self.srcIp):
                 if (pkt[1].sport == self.srcPort and pkt[1].dport == self.dstPort) or (pkt[1].sport == self.dstPort and pkt[1].dport == self.srcPort):
                     self.calcFeatures(pkt)
-                    if self.proto == 6:
-                        self.checkForAck(pkt)
                     self.pkts.append(pkt)
                     self.numPkts += 1
                     return True
