@@ -76,17 +76,43 @@ class Flow:
     def dump(self):
         return [self.proto, self.avgSize, self.avgTtl, self.numPkts, self.avgAckTime]
 
-def fields_extraction(x):
-    print(x.sprintf("{IP:%IP.src%, %IP.dst%, %IP.len%, }"
-        "{IPv6:%IPv6.src%, %IPv6.dst%, %IPv6.plen%, }"
-        "{TCP:%TCP.sport%, %TCP.dport%}"
-        "{UDP:%UDP.sport%, %UDP.dport%}"))
+# live printout of packets
+#def fields_extraction(x):
+#    print(x.sprintf("{IP:%IP.src%, %IP.dst%, %IP.len%, }"
+#        "{IPv6:%IPv6.src%, %IPv6.dst%, %IPv6.plen%, }"
+#        "{TCP:%TCP.sport%, %TCP.dport%}"
+#        "{UDP:%UDP.sport%, %UDP.dport%}"))
 
+# progress display
+progressCount = 0 # number processed
+def progressPrint():
+    global progressCount
+    message = " processed" # appended after count
+
+    # erase packet count + message
+    for x in range(0, len(str(progressCount)) + len(message)):
+        print("\b", end='')
+
+    progressCount += 1
+
+    # print count + message
+    print(str(progressCount) + message, end='')
+
+# print initial progress message
+print("Sniffing packets... 0 processed", end='')
+
+def sniffProgress(x): # remove argument from function call
+    progressPrint()
+
+# sniff packets
 flows = []
+sniffCount = 2000 # number of packets to sniff
+pkts = sniff(filter = "tcp or udp", prn=sniffProgress, count = sniffCount)
+#print("\nPackets Sniffed: ", len(pkts))
 
-pkts = sniff(filter = "tcp or udp", count = 10000)
-
-print("\nPackets Sniffed: ", len(pkts))
+# detect flows
+progressCount = 0
+print("\nCalculating flows... 0 processed", end='')
 
 for pkt in pkts:
     if pkt[1].version == 4:
@@ -96,11 +122,16 @@ for pkt in pkts:
                 inAFlow = True
         if inAFlow == False:
             flows.append(Flow(pkt))
-    else:
-        print("Not IPv4")
+    #else:
+        #print("WARNING: An IPv6 packet was omitted")
+    progressPrint()
+
+#print("\n", end='')
+#print("Number of Detected Flows: ", len(flows))
 
 print("Number of Detected Flows: ", len(flows))
 
+# write to CSV
 with open('flow_info.csv', mode='w') as flowInfo:
     flowWriter = csv.writer(flowInfo, delimiter=',', quoting=csv.QUOTE_NONE)
     # write headers
