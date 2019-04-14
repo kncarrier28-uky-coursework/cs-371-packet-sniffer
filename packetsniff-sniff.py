@@ -71,7 +71,7 @@ print("Number of Trimmed Flows: ", len(flows))
 
 
 ## write to CSV ##
-with open('flow_info.csv', mode='w') as flowInfo:
+with open('data/flows.csv', mode='w') as flowInfo:
     flowWriter = csv.writer(flowInfo, delimiter=',', quoting=csv.QUOTE_NONE)
     # write headers
     flowWriter.writerow(["proto", "avgSize", "avgTtl", "numPkts", "percentOfSample", "avgAckTime", "type"])

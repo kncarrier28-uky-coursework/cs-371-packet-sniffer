@@ -1,5 +1,5 @@
 #Retrain Data Each Time
-flow_info.csv
+flows.csv
 
 # Exclude IDE-specific files
 .vscode/
@@ -13,7 +13,7 @@ __pycache__/
 *.so
 
 # PDFS
-*.pdf
+#*.pdf
 
 # Distribution / packaging
 .Python
