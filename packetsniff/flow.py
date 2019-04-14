@@ -42,9 +42,6 @@ class Flow:
         print("Average time to live of packets: ", self.avgTtl)
         print("Protocol used: ", self.proto)
 
-    def dump(self):
-        return [self.proto, self.avgSize, self.avgTtl, self.numPkts]
-
 # live printout of packets
 #def fields_extraction(x):
 #    print(x.sprintf("{IP:%IP.src%, %IP.dst%, %IP.len%, }"
