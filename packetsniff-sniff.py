@@ -32,7 +32,7 @@ def sniffProgress(x): # remove argument from function call
     progressPrint()
 
 flows = []
-sniffCount = 2000 # number of packets to sniff
+sniffCount = 1000 # number of packets to sniff
 pkts = sniff(filter = "tcp or udp", prn=sniffProgress, count = sniffCount)
 #print("\nPackets Sniffed: ", len(pkts))
 
@@ -62,8 +62,8 @@ print("Trimming flows... 0 processed", end='')
 
 flows_orig = list(flows)
 for flow in flows_orig:
-    if flow.numPkts < sniffCount*0.01:
-        flows.remove(flow)
+    #if flow.numPkts < sniffCount*0.01:
+    #    flows.remove(flow)
     progressPrint()
 
 print("\n", end='')
@@ -78,4 +78,4 @@ with open('data/flows.csv', mode='w') as flowInfo:
     # write flows
     for i, flow in enumerate(flows):
         flowDump = flow.dump()
-        flowWriter.writerow([flowDump[0], flowDump[1], flowDump[2], flowDump[3], flowDump[3]/sniffCount, flowDump[4], 1])
+        flowWriter.writerow([flowDump[0], flowDump[1], flowDump[2], flowDump[3], flowDump[3]/sniffCount, flowDump[4], 1, flow.srcIp, flow.dstIp, flow.srcPort, flow.dstPort])
