@@ -129,7 +129,19 @@ for pkt in pkts:
 #print("\n", end='')
 #print("Number of Detected Flows: ", len(flows))
 
-print("Number of Detected Flows: ", len(flows))
+# remove flows with <1% of packets
+progressCount = 0
+print("\n", end='')
+print("Trimming flows... 0 processed", end='')
+
+flows_orig = list(flows)
+for flow in flows_orig:
+    if flow.numPkts < sniffCount*0.01:
+        flows.remove(flow)
+    progressPrint()
+
+print("\n", end='')
+print("Number of Trimmed Flows: ", len(flows))
 
 # write to CSV
 with open('flow_info.csv', mode='w') as flowInfo:
