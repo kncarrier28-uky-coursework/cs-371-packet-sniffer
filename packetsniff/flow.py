@@ -7,8 +7,8 @@ class Flow:
         self.srcIp = pkt[1].src
         self.dstIp = pkt[1].dst
         if pkt[1].dst == 'localhost':
-            self.srcIp = pkt[1].dstIp
-            self.dstIp = pkt[1].srcIp
+            self.srcIp = pkt[1].dst
+            self.dstIp = pkt[1].src
             self.srcPort = pkt[2].dport
             self.dstPort = pkt[2].sport
         self.srcPort = pkt[2].sport
