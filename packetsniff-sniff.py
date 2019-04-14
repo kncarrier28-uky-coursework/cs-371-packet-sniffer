@@ -8,11 +8,7 @@ import csv
 
 from packetsniff.flow import Flow
 
-# with open('pkt_info.csv', mode='w') as pkt_info:
-#    pkt_writer = csv.writer(pkt_info, delimiter=',', quoting=csv.QUOTE_ALL)
-#    pkts = sniff(prn = fields_extraction, count = 10)
-
-# progress display
+## progress display ##
 progressCount = 0 # number processed
 def progressPrint():
     global progressCount
@@ -27,19 +23,21 @@ def progressPrint():
     # print count + message
     print(str(progressCount) + message, end='')
 
+
+## sniff packets ##
 # print initial progress message
 print("Sniffing packets... 0 processed", end='')
 
 def sniffProgress(x): # remove argument from function call
     progressPrint()
 
-# sniff packets
 flows = []
 sniffCount = 2000 # number of packets to sniff
 pkts = sniff(filter = "tcp or udp", prn=sniffProgress, count = sniffCount)
 #print("\nPackets Sniffed: ", len(pkts))
 
-# detect flows
+
+## detect flows ##
 progressCount = 0
 print("\nCalculating flows... 0 processed", end='')
 
@@ -55,9 +53,8 @@ for pkt in pkts:
         #print("WARNING: An IPv6 packet was omitted")
     progressPrint()
 
-#print("\n", end='')
-#print("Number of Detected Flows: ", len(flows))
 
+## trim flows ##
 # remove flows with <1% of packets
 progressCount = 0
 print("\n", end='')
@@ -72,7 +69,8 @@ for flow in flows_orig:
 print("\n", end='')
 print("Number of Trimmed Flows: ", len(flows))
 
-# write to CSV
+
+## write to CSV ##
 with open('flow_info.csv', mode='w') as flowInfo:
     flowWriter = csv.writer(flowInfo, delimiter=',', quoting=csv.QUOTE_NONE)
     # write headers
