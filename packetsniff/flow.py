@@ -1,19 +1,9 @@
-from scapy.all import sniff
-import pandas as pd
-import numpy as np
-import sys
-import socket
-import os
-import csv
 import statistics
-
-# with open('pkt_info.csv', mode='w') as pkt_info:
-#    pkt_writer = csv.writer(pkt_info, delimiter=',', quoting=csv.QUOTE_ALL)
-#    pkts = sniff(prn = fields_extraction, count = 10)
 
 class Flow:
     def __init__(self, pkt):
-        if pkt[1].version == 6:
+        self.ipVersion = pkt[1].version
+        if self.ipVersion == 6:
             self.proto = pkt[1].nh
         else:
             self.proto = pkt[1].proto
@@ -55,7 +45,7 @@ class Flow:
     def checkForAck(self, pkt):
         for flowPkt in self.pkts:
             if flowPkt[2].seq == pkt[2].ack:
-                if self.avgAckTime == -1:
+                if self.avgAckTime == -1 or self.avgAckTime == 0:
                     self.avgAckTime = pkt.time - flowPkt.time
                 else:
                     self.avgAckTime = statistics.mean([pkt.time - flowPkt.time, self.avgAckTime])
@@ -75,36 +65,9 @@ class Flow:
     def dump(self):
         return [self.proto, self.avgSize, self.avgTtl, self.numPkts, self.avgAckTime]
 
-def fields_extraction(x):
-    print(x.sprintf("{IP:%IP.src%, %IP.dst%, %IP.len%, }"
-        "{IPv6:%IPv6.src%, %IPv6.dst%, %IPv6.plen%, }"
-        "{TCP:%TCP.sport%, %TCP.dport%}"
-        "{UDP:%UDP.sport%, %UDP.dport%}"))
-
-flows = []
-
-pkts = sniff(filter = "tcp or udp", prn = fields_extraction, count = 100)
-
-print("\nPackets Sniffed: ", len(pkts))
-
-for pkt in pkts:
-    print("Test 1")
-    inAFlow = False
-    for flow in flows:
-        print("test 2")
-        if flow.isPartOfFlow(pkt) == True:
-            inAFlow = True
-        print("Test 3")
-    if inAFlow == False:
-        flows.append(Flow(pkt))
-
-print("Number of Detected Flows: ", len(flows))
-
-with open('flow_info.csv', mode='w') as flowInfo:
-    flowWriter = csv.writer(flowInfo, delimiter=',', quoting=csv.QUOTE_NONE)
-    # write headers
-    flowWriter.writerow(["proto", "avgSize", "avgTtl", "numPkts", "avgAckTime", "type"])
-    # write flows
-    for i, flow in enumerate(flows):
-        flowDump = flow.dump()
-        flowWriter.writerow([flowDump[0], flowDump[1], flowDump[2], flowDump[3], flowDump[4], 1])
+# live printout of packets
+#def fields_extraction(x):
+#    print(x.sprintf("{IP:%IP.src%, %IP.dst%, %IP.len%, }"
+#        "{IPv6:%IPv6.src%, %IPv6.dst%, %IPv6.plen%, }"
+#        "{TCP:%TCP.sport%, %TCP.dport%}"
+#        "{UDP:%UDP.sport%, %UDP.dport%}"))
