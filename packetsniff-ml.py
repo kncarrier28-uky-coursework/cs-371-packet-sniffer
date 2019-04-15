@@ -21,32 +21,27 @@ df = pd.read_csv("data/trainingSet.csv", header=0)
 
 X = df[df.columns[:-1]] # use all columns except last one (type)
 y = df['type']
-resultsDT = []
-resultsNN = []
-resultsSVM = []
+results = []
 
 acc_scores = 0
 for i in range(0, 10):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
 
     #Decision Trees
-    clf = tree.DecisionTreeClassifier()
-    clf.fit(X_train, y_train)
-    resultsDT.append(clf.score(X_test, y_test))
+    # clf = tree.DecisionTreeClassifier()
+    # clf.fit(X_train, y_train)
 
     # Neural network (MultiPerceptron Classifier)
-    clf = MLPClassifier()
-    clf.fit(X_train, y_train)
-    resultsNN.append(clf.score(X_test, y_test))
+    # clf = MLPClassifier()
+    # clf.fit(X_train, y_train)
 
     #SVM's
     clf = SVC(gamma='auto')     #SVC USE THIS
     clf = LinearSVC(max_iter = 10000)  #Linear SVC
     clf.fit(X_train, y_train)
 
-    #here you are supposed to calculate the evaluation measures indicated in the project proposal (accuracy, F-score etc)
-    resultsSVM.append(clf.score(X_test, y_test))  #accuracy score -- score has to be output in graph form
 
-print(resultsDT)
-print(resultsNN)
-print(resultsSVM)
+    #here you are supposed to calculate the evaluation measures indicated in the project proposal (accuracy, F-score etc)
+    results.append(clf.score(X_test, y_test))  #accuracy score -- score has to be output in graph form
+
+print(results)
