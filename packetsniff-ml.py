@@ -35,8 +35,8 @@ for i in range(0, 10):
     resultsNN.append(clfNN.score(X_test, y_test))
 
     #SVM's
-    clfSVC = SVC(gamma='auto')     #SVC USE THIS
-    clfSVC = LinearSVC(max_iter = 100000)  #Linear SVC
+    clfSVC = SVC(kernel='linear')     #SVC USE THIS
+    #clfSVC = LinearSVC()  #Linear SVC #max_iter = 100000
     clfSVC.fit(X_train, y_train)
 
     #here you are supposed to calculate the evaluation measures indicated in the project proposal (accuracy, F-score etc)
