@@ -41,7 +41,7 @@ for i in range(0, 10):
 
     #SVM's
     clfSVC = SVC(gamma='auto')     #SVC USE THIS
-    clfSVC = LinearSVC(max_iter = 10000)  #Linear SVC
+    clfSVC = LinearSVC(max_iter = 100000)  #Linear SVC
     clfSVC.fit(X_train, y_train)
 
     #here you are supposed to calculate the evaluation measures indicated in the project proposal (accuracy, F-score etc)
@@ -55,14 +55,14 @@ ind = np.arange(len(resultsNN))
 width = 0.25
 
 p1 = plt.bar(ind, resultsDT, width)
-p2 =  plt.bar(ind, resultsNN, width, bottom = resultsNN)
-p3 =  plt.bar(ind, resultsSVC, width, bottom = resultsSVC)
+p2 =  plt.bar(ind, resultsNN, width) # , bottom = resultsNN)
+p3 =  plt.bar(ind, resultsSVC, width) #, bottom = resultsSVC)
 
 plt.title('Evaluation')
 plt.xlabel('Executions')
 plt.ylabel('Accuracy')
 plt.xticks(np.arange(0, 10, 1))
-plt.yticks(np.arange(0, 2.1, 0.5))
-plt.legend(('Decision Trees', 'Neural network', 'SVC'), loc = 'best')
+plt.yticks(np.arange(0, 1.1, 0.2))
+plt.legend(('Decision Trees', 'Neural network', 'SVC'), loc = 'lower right')
 plt.show()
 #plt.savefig('Evaluation.png')
