@@ -46,7 +46,7 @@ print('Support Vector Machine: ' + str(resultsSVC))
 print('Neural Network: ' + str(resultsNN))
 
 ind = np.arange(len(resultsNN))
-width = 0.5
+width = 0.2
 
 p1 = plt.bar(ind-width, resultsDT, width)
 p3 = plt.bar(ind, resultsSVC, width) #, bottom = resultsSVC)
