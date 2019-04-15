@@ -32,6 +32,7 @@ for i in range(0, 10):
     #Decision Trees
     clfDT = tree.DecisionTreeClassifier()
     clfDT.fit(X_train, y_train)
+    #here you are supposed to calculate the evaluation measures indicated in the project proposal (accuracy, F-score etc)
     resultsDT.append(clfDT.score(X_test, y_test))
 
     # Neural network (MultiPerceptron Classifier)
@@ -43,8 +44,6 @@ for i in range(0, 10):
     clfSVC = SVC(gamma='auto')     #SVC USE THIS
     clfSVC = LinearSVC(max_iter = 100000)  #Linear SVC
     clfSVC.fit(X_train, y_train)
-
-    #here you are supposed to calculate the evaluation measures indicated in the project proposal (accuracy, F-score etc)
     resultsSVC.append(clfSVC.score(X_test, y_test))  #accuracy score -- score has to be output in graph form
 
 print(resultsDT)
@@ -52,7 +51,7 @@ print(resultsNN)
 print(resultsSVC)
 
 ind = np.arange(len(resultsNN))
-width = 0.25
+width = 0.5
 
 p1 = plt.bar(ind, resultsDT, width)
 p2 =  plt.bar(ind, resultsNN, width) # , bottom = resultsNN)
@@ -65,4 +64,4 @@ plt.xticks(np.arange(0, 10, 1))
 plt.yticks(np.arange(0, 1.1, 0.2))
 plt.legend(('Decision Trees', 'Neural network', 'SVC'), loc = 'lower right')
 plt.show()
-#plt.savefig('Evaluation.png')
+plt.savefig('Evaluation.png')
