@@ -9,7 +9,7 @@ from sklearn import tree
 
 
 # read CSV including header
-df = pd.read_csv("flow_info.csv", header=0)
+df = pd.read_csv("data/trainingSet.csv", header=0)
 # You might not need this next line if you do not care about losing information about flow_id etc. All you actually need to
 # feed your machine learning model are features and output label.
 # columns_list = ['proto', 'feature_1', 'feature_2', 'feature_3', 'feature_4', 'label']
@@ -18,6 +18,7 @@ df = pd.read_csv("flow_info.csv", header=0)
 
 X = df[df.columns[:-1]] # use all columns except last one (type)
 y = df['type']
+results = []
 
 acc_scores = 0
 for i in range(0, 10):
@@ -38,5 +39,6 @@ for i in range(0, 10):
 
 
     #here you are supposed to calculate the evaluation measures indicated in the project proposal (accuracy, F-score etc)
-    result = clf.score(X_test, y_test)  #accuracy score
-    print(result)
+    results.append(clf.score(X_test, y_test))  #accuracy score
+
+print(results)
