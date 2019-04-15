@@ -42,22 +42,23 @@ for i in range(0, 10):
     #here you are supposed to calculate the evaluation measures indicated in the project proposal (accuracy, F-score etc)
     resultsSVC.append(clfSVC.score(X_test, y_test))  #accuracy score -- score has to be output in graph form
 
-print(resultsDT)
-print(resultsNN)
-print(resultsSVC)
+print('Decision Tree: ' + str(resultsDT))
+print('Support Vector Machine: ' + str(resultsSVC))
+print('Neural Network: ' + str(resultsNN))
 
 ind = np.arange(len(resultsNN))
 width = 0.25
 
-p1 = plt.bar(ind, resultsDT, width)
-p2 =  plt.bar(ind, resultsNN, width) # , bottom = resultsNN)
-p3 =  plt.bar(ind, resultsSVC, width) #, bottom = resultsSVC)
+p1 = plt.bar(ind-width, resultsDT, width)
+p3 = plt.bar(ind, resultsSVC, width) #, bottom = resultsSVC)
+p2 = plt.bar(ind+width, resultsNN, width) # , bottom = resultsNN)
 
 plt.title('Evaluation')
 plt.xlabel('Executions')
 plt.ylabel('Accuracy')
 plt.xticks(np.arange(0, 10, 1))
 plt.yticks(np.arange(0, 1.1, 0.2))
-plt.legend(('Decision Trees', 'Neural network', 'SVC'), loc = 'lower right')
+plt.legend(('Decision Tree', 'Support Vector Machine', 'Neural Network'), loc = 'lower right')
 plt.show()
 #plt.savefig('Evaluation.png')
+#plt.clf()
