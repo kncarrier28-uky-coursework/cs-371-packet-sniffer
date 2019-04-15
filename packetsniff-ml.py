@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.svm import SVC
 from sklearn.svm import LinearSVC
 from sklearn import tree
-import matplotlib.pyplot
+import matplotlib.pyplot as plt
 from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
 from sklearn.datasets import make_classification
@@ -50,3 +50,18 @@ for i in range(0, 10):
 print(resultsDT)
 print(resultsNN)
 print(resultsSVC)
+
+ind = np.arange(len(resultsNN))
+width = 0.25
+
+p1 = plt.bar(ind, resultsDT, width)
+p2 =  plt.bar(ind, resultsNN, width)
+p3 =  plt.bar(ind, resultsSVC, width, bottom = resultsSVC)
+
+plt.title('Evaluation')
+plt.xlabel('Executions')
+plt.ylabel('Accuracy')
+plt.xticks(np.arange(0, 11, 2))
+plt.yticks(np.arange(0, 11, 2))
+#plt.legend((resultsDT[0], resultsNN[0], resultsSVC[0]), ('Decision Trees', 'Neural network', 'SVC'))
+plt.show()
