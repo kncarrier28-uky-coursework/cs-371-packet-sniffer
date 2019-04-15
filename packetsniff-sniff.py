@@ -81,7 +81,8 @@ print("Number of Trimmed Flows: ", len(flows))
 with open('data/flows.csv', mode='w') as flowInfo:
     flowWriter = csv.writer(flowInfo, delimiter=',', quoting=csv.QUOTE_NONE)
     # write headers
-    flowWriter.writerow(["proto", "maxIn", "maxOut", "numPkts", "inSplit", "outSplit", "type"])
+    flowWriter.writerow(["proto", "maxIn", "maxOut", "numPkts", "inSplit", "outSplit"])
     # write flows
     for i, flow in enumerate(flows):
-        flowWriter.writerow([flow.proto, flow.features["maxIn"], flow.features["maxOut"], flow.features["numPkts"], flow.features["inSplit"], flow.features["outSplit"], 3])
+        print("Src IP: ", flow.srcIp, "\nDest IP: ", flow.dstIp, "\n\n")
+        flowWriter.writerow([flow.proto, flow.features["maxIn"], flow.features["maxOut"], flow.features["numPkts"], flow.features["inSplit"], flow.features["outSplit"]])
