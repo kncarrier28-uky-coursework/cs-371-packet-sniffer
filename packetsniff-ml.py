@@ -55,7 +55,7 @@ ind = np.arange(len(resultsNN))
 width = 0.25
 
 p1 = plt.bar(ind, resultsDT, width)
-p2 =  plt.bar(ind, resultsNN, width)
+p2 =  plt.bar(ind, resultsNN, width, bottom = resultsNN)
 p3 =  plt.bar(ind, resultsSVC, width, bottom = resultsSVC)
 
 plt.title('Evaluation')
@@ -63,6 +63,6 @@ plt.xlabel('Executions')
 plt.ylabel('Accuracy')
 plt.xticks(np.arange(0, 10, 1))
 plt.yticks(np.arange(0, 2.1, 0.5))
-plt.legend(('Decision Trees', 'Neural network', 'SVC'))
-#plt.show()
-plt.savefig('Evaluation.png')
+plt.legend(('Decision Trees', 'Neural network', 'SVC'), loc = 'best')
+plt.show()
+#plt.savefig('Evaluation.png')
