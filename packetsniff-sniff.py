@@ -70,19 +70,18 @@ print("Trimming flows... 0 processed", end='')
 
 flows_orig = list(flows)
 for flow in flows_orig:
-    #if flow.numPkts < sniffCount*0.01:
+    #if flow.features['numPkts'] < sniffCount*0.01:
     #    flows.remove(flow)
     progressPrint()
 
 print("\n", end='')
 print("Number of Trimmed Flows: ", len(flows))
 
-
 ## write to CSV ##
 with open('data/flows.csv', mode='w') as flowInfo:
     flowWriter = csv.writer(flowInfo, delimiter=',', quoting=csv.QUOTE_NONE)
     # write headers
-    flowWriter.writerow(["proto", "avgSize", "avgTtl", "numPkts", "percentOfSample", "type"])
+    flowWriter.writerow(["proto", "maxIn", "maxOut", "numPkts", "inSplit", "outSplit", "type"])
     # write flows
     for i, flow in enumerate(flows):
-        flowWriter.writerow([flow.proto, flow.avgSize, flow.avgTtl, flow.numPkts, flow.numPkts/sniffCount, 1, flow.srcIp, flow.dstIp, flow.srcPort, flow.dstPort])
+        flowWriter.writerow([flow.proto, flow.features["maxIn"], flow.features["maxOut"], flow.features["numPkts"], flow.features["inSplit"], flow.features["outSplit"], 2])

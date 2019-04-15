@@ -4,45 +4,47 @@ class Flow:
     def __init__(self, pkt):
         self.ipVersion = pkt[1].version
         self.proto = pkt[1].proto
-        self.srcIp = pkt[1].src
-        self.dstIp = pkt[1].dst
-        self.srcPort = pkt[2].sport
-        self.dstPort = pkt[2].dport
-        if pkt[1].dst == 'localhost':
-            self.srcIp = pkt[1].dst
-            self.dstIp = pkt[1].src
-            self.srcPort = pkt[2].dport
-            self.dstPort = pkt[2].sport
-        self.avgSize = pkt[1].len
-        self.avgTtl = pkt[1].ttl
+        self.srcIp = pkt[1].src if pkt[1].src == 'localhost' else pkt[1].dst
+        self.dstIp = pkt[1].dst if pkt[1].src == 'localhost' else pkt[1].src
+        self.srcPort = pkt[2].sport if pkt[1].src == 'localhost' else pkt[2].dport
+        self.dstPort = pkt[2].dport if pkt[1].src == 'localhost' else pkt[2].sport
+        self.features = {
+            'numPkts': 1,
+            'maxIn': pkt[1].len if pkt[1].dst == 'localhost' else 0,
+            'maxOut': pkt[1].len if pkt[1].src == 'localhost' else 0,
+            'inSplit': 1 if pkt[1].dst == 'localhost' else 0,
+            'outSplit': 1 if pkt[1].src == 'localhost' else 0
+        }
         self.pkts = [pkt]
-        self.numPkts = 1
 
     def isPartOfFlow(self, pkt):
         pktProto = pkt[1].proto
         if pktProto == self.proto:
             if (pkt[1].src == self.srcIp and pkt[1].dst == self.dstIp) or (pkt[1].src == self.dstIp and pkt[1].dst == self.srcIp):
                 if (pkt[1].sport == self.srcPort and pkt[1].dport == self.dstPort) or (pkt[1].sport == self.dstPort and pkt[1].dport == self.srcPort):
+                    self.features['numPkts'] += 1
                     self.calcFeatures(pkt)
                     self.pkts.append(pkt)
-                    self.numPkts += 1
                     return True
         return False
 
     def calcFeatures(self, pkt):
-        self.calcAvgSize(pkt)
-        self.calcAvgTtl(pkt)
+        self.trafficSplit(pkt)
+        self.maxPacketSize(pkt)
 
-    def calcAvgSize(self, pkt):
-        self.avgSize = statistics.mean([self.avgSize, pkt[1].len])
+    def trafficSplit(self, pkt):
+        key = 'outSplit' if pkt[1].src == 'localhost' else 'inSplit'
+        otherKey = 'inSplit' if pkt[1].src == 'localhost' else 'outSplit'
+        self.features[key] = ((self.features[key] * (self.features['numPkts'] - 1)) + 1) / self.features['numPkts']
+        self.features[otherKey] = 1 - self.features[key]
 
-    def calcAvgTtl(self, pkt):
-        self.avgTtl = statistics.mean([self.avgTtl, pkt[1].ttl])
+    def maxPacketSize(self, pkt):
+        key = 'maxOut' if pkt[1].src == 'localhost' else 'maxIn'
+        if self.features[key] < pkt[1].len:
+            self.features[key] = pkt[1].len
 
     def printFeatures(self):
-        print("Number of Packets in flow: ", self.numPkts)
-        print("Average size of packets: ", self.avgSize)
-        print("Average time to live of packets: ", self.avgTtl)
+        print("Number of Packets in flow: ", self.features['numPkts'])
         print("Protocol used: ", self.proto)
 
 # live printout of packets
