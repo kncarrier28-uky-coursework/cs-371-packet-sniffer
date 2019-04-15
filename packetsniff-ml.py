@@ -13,11 +13,6 @@ from sklearn.datasets import make_classification
 
 # read CSV including header
 df = pd.read_csv("data/trainingSet.csv", header=0)
-# You might not need this next line if you do not care about losing information about flow_id etc. All you actually need to
-# feed your machine learning model are features and output label.
-# columns_list = ['proto', 'feature_1', 'feature_2', 'feature_3', 'feature_4', 'label']
-# df.columns = columns_list -- read headers from file
-# features = ['proto', 'feature_1', 'feature_2', 'feature_3', 'feature_4']
 
 X = df[df.columns[:-1]] # use all columns except last one (type)
 y = df['type']
