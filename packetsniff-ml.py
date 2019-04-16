@@ -23,8 +23,12 @@ resultsNN = []
 resultsSVC = []
 
 acc_scores = 0
+
+testruns = 10
+testrunsprint = 20
+
 progress = ProgressDisplay("Training models... ", " tests ran")
-for i in range(0, 10):
+for i in range(0, testruns):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
 
     #Decision Trees
@@ -48,26 +52,32 @@ for i in range(0, 10):
     
 progress.newline()
 
-print('Decision Tree: ' + str(resultsDT))
-print("    Avg: " + str(sum(resultsDT)/len(resultsDT)))
-print('Support Vector Machine: ' + str(resultsSVC))
-print("    Avg: " + str(sum(resultsSVC)/len(resultsSVC)))
-print('Neural Network: ' + str(resultsNN))
-print("    Avg: " + str(sum(resultsNN)/len(resultsNN)))
+print('Decision Tree: ' + str(sum(resultsDT)/len(resultsDT)))
+if (testruns <= testrunsprint):
+    print(resultsDT)
+print('Support Vector Machine: ' + str(sum(resultsSVC)/len(resultsSVC)))
+if (testruns <= testrunsprint):
+    print(resultsSVC)
+print('Neural Network: ' + str(sum(resultsNN)/len(resultsNN)))
+if (testruns <= testrunsprint):
+    print(resultsNN)
 
-ind = np.arange(1,11,1)
-width = 0.2
+# print graph if small testrun count
+if (testruns <= testrunsprint):
 
-p1 = plt.bar(ind-width, resultsDT, width)
-p3 = plt.bar(ind, resultsSVC, width) #, bottom = resultsSVC)
-p2 = plt.bar(ind+width, resultsNN, width) # , bottom = resultsNN)
+    ind = np.arange(1, testruns+1 ,1)
+    width = 0.2
 
-plt.title('Evaluation')
-plt.xlabel('Test Run')
-plt.ylabel('Accuracy')
-plt.xticks(np.arange(1, 11, 1))
-plt.yticks(np.arange(0, 1.1, 0.1))
-plt.ylim(top=1.0)
-plt.legend(('Decision Tree', 'Support Vector Machine', 'Neural Network'), loc = 'lower right')
-plt.show() # save button is available
-#plt.savefig('Evaluation.png')
+    p1 = plt.bar(ind-width, resultsDT, width)
+    p3 = plt.bar(ind, resultsSVC, width) #, bottom = resultsSVC)
+    p2 = plt.bar(ind+width, resultsNN, width) # , bottom = resultsNN)
+
+    plt.title('Evaluation')
+    plt.xlabel('Test Run')
+    plt.ylabel('Accuracy')
+    plt.xticks(np.arange(1, testruns+1, 1))
+    plt.yticks(np.arange(0, 1.1, 0.1))
+    plt.ylim(top=1.0)
+    plt.legend(('Decision Tree', 'Support Vector Machine', 'Neural Network'), loc = 'lower right')
+    plt.show() # save button is available
+    #plt.savefig('Evaluation.png')
