@@ -11,6 +11,8 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
 from sklearn.datasets import make_classification
 
+from packetsniff.progress import ProgressDisplay
+
 # read CSV including header
 df = pd.read_csv("data/trainingSet.csv", header=0)
 
@@ -21,6 +23,7 @@ resultsNN = []
 resultsSVC = []
 
 acc_scores = 0
+progress = ProgressDisplay("Training models... ", " tests ran")
 for i in range(0, 10):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
 
@@ -40,6 +43,10 @@ for i in range(0, 10):
     #clfSVC = LinearSVC()  #Linear SVC #max_iter = 100000
     clfSVC.fit(X_train, y_train)
     resultsSVC.append(clfSVC.score(X_test, y_test))  #accuracy score -- score has to be output in graph form
+
+    progress.next()
+    
+progress.newline()
 
 print('Decision Tree: ' + str(resultsDT))
 print('Support Vector Machine: ' + str(resultsSVC))
