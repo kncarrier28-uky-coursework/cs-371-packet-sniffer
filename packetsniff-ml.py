@@ -62,7 +62,7 @@ for i in range(0, testruns):
     #here you are supposed to calculate the evaluation measures indicated in the project proposal (accuracy, F-score etc)
     resultsSVC.append(clfSVC.score(X_test, y_test))  #accuracy score -- score has to be output in graph form
 
-    predictions.append(mode(set([dtPrediction[0], nnPrediction[0], svcPrediction[0]])))
+    predictions.append(mode([dtPrediction[0], nnPrediction[0], svcPrediction[0]]))
 
     progress.next()
 
@@ -78,7 +78,7 @@ print('Neural Network: ' + str(sum(resultsNN)/len(resultsNN)))
 if (testruns <= testrunsprint):
     print(resultsNN)
 
-finalPrediction = mode(set(predictions))
+finalPrediction = mode(predictions)
 if finalPrediction == 1:
     finalPredictionString = "Web Browsing"
 elif finalPrediction == 2:
