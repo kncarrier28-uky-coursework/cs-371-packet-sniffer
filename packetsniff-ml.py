@@ -101,7 +101,11 @@ if not (live):
     if (testruns <= testrunsprint):
         print(resultsNN)
 
-finalPrediction = mode(predictions)
+if not (live):
+    finalPrediction = mode(predictions)
+else:
+    finalPrediction = svcPrediction
+
 if finalPrediction == 1:
     finalPredictionString = "Web Browsing"
 elif finalPrediction == 2:
