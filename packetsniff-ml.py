@@ -49,8 +49,11 @@ for i in range(0, 10):
 progress.newline()
 
 print('Decision Tree: ' + str(resultsDT))
+print("    Avg: " + str(sum(resultsDT)/len(resultsDT)))
 print('Support Vector Machine: ' + str(resultsSVC))
+print("    Avg: " + str(sum(resultsSVC)/len(resultsSVC)))
 print('Neural Network: ' + str(resultsNN))
+print("    Avg: " + str(sum(resultsNN)/len(resultsNN)))
 
 ind = np.arange(1,11,1)
 width = 0.2
