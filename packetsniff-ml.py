@@ -45,7 +45,7 @@ print('Decision Tree: ' + str(resultsDT))
 print('Support Vector Machine: ' + str(resultsSVC))
 print('Neural Network: ' + str(resultsNN))
 
-ind = np.arange(len(resultsNN))
+ind = np.arange(1,11,1)
 width = 0.2
 
 p1 = plt.bar(ind-width, resultsDT, width)
@@ -53,10 +53,11 @@ p3 = plt.bar(ind, resultsSVC, width) #, bottom = resultsSVC)
 p2 = plt.bar(ind+width, resultsNN, width) # , bottom = resultsNN)
 
 plt.title('Evaluation')
-plt.xlabel('Executions')
+plt.xlabel('Test Run')
 plt.ylabel('Accuracy')
-plt.xticks(np.arange(0, 10, 1))
-plt.yticks(np.arange(0, 1.1, 0.2))
+plt.xticks(np.arange(1, 11, 1))
+plt.yticks(np.arange(0, 1.1, 0.1))
+plt.ylim(top=1.0)
 plt.legend(('Decision Tree', 'Support Vector Machine', 'Neural Network'), loc = 'lower right')
 plt.show() # save button is available
 #plt.savefig('Evaluation.png')
