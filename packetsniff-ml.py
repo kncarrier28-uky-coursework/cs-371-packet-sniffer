@@ -41,7 +41,7 @@ progress = ProgressDisplay("Training models... ", " tests ran")
 
 if (live):
     testsize = 0
-    testruns = 1
+    testruns = 10
 else:
     testsize = 0.25
     testruns = 10
@@ -81,7 +81,10 @@ for i in range(0, testruns):
         resultsSVC.append(clfSVC.score(X_test, y_test))  #accuracy score -- score has to be output in graph form
 
     if len(set([dtPrediction[0], nnPrediction[0], svcPrediction[0]])) != len([dtPrediction[0], nnPrediction[0], svcPrediction[0]]):
-        predictions.append(mode([dtPrediction[0], nnPrediction[0], svcPrediction[0]]))
+        #if not (live):
+            predictions.append(mode([dtPrediction[0], nnPrediction[0], svcPrediction[0]]))
+        #else:
+        #    predictions.append(mode(svcPrediction))
 
     progress.next()
     if(debug):
@@ -101,10 +104,7 @@ if not (live):
     if (testruns <= testrunsprint):
         print(resultsNN)
 
-if not (live):
-    finalPrediction = mode(predictions)
-else:
-    finalPrediction = svcPrediction
+finalPrediction = mode(predictions)
 
 if finalPrediction == 1:
     finalPredictionString = "Web Browsing"
