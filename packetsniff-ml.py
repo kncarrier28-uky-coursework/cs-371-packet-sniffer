@@ -31,7 +31,7 @@ for i in range(0, 10):
     resultsDT.append(clfDT.score(X_test, y_test))
 
     # Neural network (MultiPerceptron Classifier)
-    clfNN = MLPClassifier()
+    clfNN = MLPClassifier(max_iter=1000)
     clfNN.fit(X_train, y_train)
     resultsNN.append(clfNN.score(X_test, y_test))
 
