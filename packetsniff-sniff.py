@@ -10,6 +10,7 @@ from packetsniff.flow import Flow
 from packetsniff.interfaces import getIpAddresses
 from packetsniff.progress import ProgressDisplay
 
+debug = False
 
 ## sniff packets ##
 progress = ProgressDisplay("Sniffing packets... ", " processed")
@@ -59,7 +60,8 @@ for flow in flows_orig:
     progress.next()
 
 progress.newline()
-print("Number of Trimmed Flows: ", len(flows))
+if (debug):
+    print("Number of Trimmed Flows: ", len(flows))
 
 ## write to CSV ##
 with open('data/flows.csv', mode='w') as flowInfo:
@@ -68,5 +70,6 @@ with open('data/flows.csv', mode='w') as flowInfo:
     flowWriter.writerow(["proto", "maxIn", "maxOut", "numPkts", "inSplit", "outSplit"])
     # write flows
     for i, flow in enumerate(flows):
-        print("Src IP: ", flow.srcIp, "\nDest IP: ", flow.dstIp, "\n\n")
+        if (debug):
+            print("Src IP: ", flow.srcIp, "\nDest IP: ", flow.dstIp, "\n\n")
         flowWriter.writerow([flow.proto, flow.features["maxIn"], flow.features["maxOut"], flow.features["numPkts"], flow.features["inSplit"], flow.features["outSplit"]])
