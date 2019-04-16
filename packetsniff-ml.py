@@ -62,7 +62,8 @@ for i in range(0, testruns):
     #here you are supposed to calculate the evaluation measures indicated in the project proposal (accuracy, F-score etc)
     resultsSVC.append(clfSVC.score(X_test, y_test))  #accuracy score -- score has to be output in graph form
 
-    predictions.append(mode([dtPrediction[0], nnPrediction[0], svcPrediction[0]]))
+    if len(set([dtPrediction[0], nnPrediction[0], svcPrediction[0]])) != len([dtPrediction[0], nnPrediction[0], svcPrediction[0]]):
+        predictions.append(mode([dtPrediction[0], nnPrediction[0], svcPrediction[0]]))
 
     progress.next()
 
