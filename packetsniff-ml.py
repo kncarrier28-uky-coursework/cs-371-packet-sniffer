@@ -58,5 +58,5 @@ plt.ylabel('Accuracy')
 plt.xticks(np.arange(0, 10, 1))
 plt.yticks(np.arange(0, 1.1, 0.2))
 plt.legend(('Decision Tree', 'Support Vector Machine', 'Neural Network'), loc = 'lower right')
-plt.show()
-plt.savefig('Evaluation.png')
+plt.show() # save button is available
+#plt.savefig('Evaluation.png')
